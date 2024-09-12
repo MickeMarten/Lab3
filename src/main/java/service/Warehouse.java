@@ -4,6 +4,7 @@ import entities.Category;
 import entities.Product;
 
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -14,38 +15,35 @@ import java.util.stream.Collectors;
 public class Warehouse {
     private static final List<Product> products = new ArrayList<>();
 
-    public static void main(String[] args) {
-        addProduct();
-        modifyProduct(1, "Pepsi", Category.DRINK, 9);
+    public static void resetProducts() {
+        products.clear();
     }
 
-    public static void addProduct() {
-        products.add(new Product(1, "Apelsin", Category.FRUITS, 5, LocalDate.of(2024, 12, 30), LocalDate.of(2024, 1, 28)));
+
+    public static void main(String[] args) {
+        addProductForTest();
+
+        List<Product> test = getProductsThatHasBeenModified();
+        System.out.println(test);
+    }
+
+    public static void addProductForTest() {
+        products.add(new Product(1, "Apelsin", Category.FRUITS, 5, LocalDate.of(2024, 12, 30),null));
         products.add(new Product(2, "Banan", Category.FRUITS, 1, LocalDate.of(2023, 8, 25), LocalDate.of(2024, 2, 23)));
         products.add(new Product(3, "Kyckling", Category.MEAT, 9, LocalDate.of(2024, 11, 22), LocalDate.of(2024, 3, 11)));
         products.add(new Product(5, "Pepsi", Category.DRINK, 6, LocalDate.of(2023, 6, 12), LocalDate.of(2024, 9, 2)));
         products.add(new Product(7, "Zola", Category.DRINK, 10, LocalDate.of(2023, 6, 12), LocalDate.of(2024, 6, 2)));
-        products.add(new Product(6, "Fanta", Category.DRINK, 1, LocalDate.of(2023, 6, 12), LocalDate.of(2024, 7, 5)));
+        products.add(new Product(6, "Fanta", Category.DRINK, 1, LocalDate.of(2023, 6, 12), LocalDate.of(2023, 8, 12)));
         products.add(new Product(8, "Fläsk", Category.MEAT, 8, LocalDate.of(2023, 4, 4), LocalDate.of(2024, 4, 4)));
     }
 
 
     public static List<Product> getAllProducts() {
-        System.out.println(products);
+
 
         return Collections.unmodifiableList(products);
     }
 
-
-    public static void sortProduct() {
-        List<Product> sortedList = products.stream()
-                .filter(item -> item.rating() > 1).peek(System.out::println)
-                .collect(Collectors.toList());
-
-        System.out.println(sortedList);
-
-
-    }
 
     public static Product getProductById(int id) {
 
@@ -68,7 +66,6 @@ public class Warehouse {
         }
         products.add(product);
 
-
     }
 
     public static void modifyProduct(int id, String newName, Category newCategory, int newRating) {
@@ -78,12 +75,22 @@ public class Warehouse {
         Product modifiedProduct = new Product(product.id(), newName, newCategory, newRating, product.createdAt(), LocalDate.now());
 
         products.set(products.indexOf(product), modifiedProduct);
-        System.out.println(products);
-
 
     }
 
-    //Todo: Hämta alla produkter skapde efter angivet Datum. (Nya produkter sist).
-    //Todo: Hämta alla produkter  som modiferats sen de skapades (Datum ej samma).
+    public static List<Product> getProductsAfterDate(LocalDate dateAfter) {
+        return products.stream().filter(product -> product.createdAt().isAfter(dateAfter)).collect(Collectors.toUnmodifiableList());
+
+    }
+
+    public static List<Product> getProductsThatHasBeenModified() {
+        return products.stream()
+                .filter(product -> product.modifiedAt() != null && !product.createdAt()
+                        .isEqual(product.modifiedAt()))
+                .collect(Collectors.toUnmodifiableList());
+    }
+    //Todo: Lägg till test för getproductsThathasBeenmodified
+    //Todo: Lägg till Test för addNewProduct
+
 
 }
