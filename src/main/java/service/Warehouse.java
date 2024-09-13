@@ -3,8 +3,6 @@ package service;
 import entities.Category;
 import entities.Product;
 
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -22,6 +20,7 @@ public class Warehouse {
 
     public static void main(String[] args) {
         addProductForTest();
+
 
         List<Product> test = getProductsThatHasBeenModified();
         System.out.println(test);
@@ -78,7 +77,7 @@ public class Warehouse {
 
     }
 
-    public static List<Product> getProductsAfterDate(LocalDate dateAfter) {
+    public static List<Product> getProductsAfterGivenDate(LocalDate dateAfter) {
         return products.stream().filter(product -> product.createdAt().isAfter(dateAfter)).collect(Collectors.toUnmodifiableList());
 
     }
@@ -90,7 +89,7 @@ public class Warehouse {
                 .collect(Collectors.toUnmodifiableList());
     }
     //Todo: Lägg till test för getproductsThathasBeenmodified
-    //Todo: Lägg till Test för addNewProduct
+    //TOdo: Try catch?
 
 
 }
