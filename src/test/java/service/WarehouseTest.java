@@ -2,15 +2,10 @@ package service;
 
 import entities.Category;
 import entities.Product;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import java.time.LocalDate;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WarehouseTest {
@@ -20,29 +15,25 @@ public class WarehouseTest {
     @BeforeEach
     void setUp() {
         Warehouse.resetProducts();
-        System.out.println("Products before test: " + Warehouse.getAllProducts());
         Warehouse.addProductForTest();
     }
 
-    @AfterEach
-    void tearDown() {
-        System.out.println("Products after test: " + Warehouse.getAllProducts());
-    }
 
     @Test
     @DisplayName("Test to get all products")
     void testToGetAllProductsInList() {
-        List<Product> result = Warehouse.getAllProducts();
+        var result = Warehouse.getAllProducts();
 
-        assertNotNull(result, "ProductList should not be empty.");
-        assertTrue(result.size() > 0, "");
+        assertEquals(7, result.size());
+        assertNotNull(result, "ProductList should not be null");
+        assertFalse(result.isEmpty(), "ProductList should not be empty");
     }
 
 
     @Test
     @DisplayName("Test to get a product by id")
     void getProductById() {
-        Product result = Warehouse.getProductById(1);
+        var result = Warehouse.getProductById(1);
 
         assertNotNull(result, "Product should not be null.");
         assertEquals(1, result.id(), "Wrong id");
@@ -57,7 +48,7 @@ public class WarehouseTest {
     @Test
     @DisplayName("Test to get products by category and sorted by name")
     void getProductByCategorySortedByName() {
-        List<Product> result = Warehouse.getProductByCategorySortedByName(Category.DRINK);
+        var result = Warehouse.getProductByCategorySortedByName(Category.DRINK);
 
         assertFalse(result.isEmpty(), "List with drinks should not be empty.");
         assertEquals("Zola", result.getLast().name());
@@ -73,7 +64,7 @@ public class WarehouseTest {
     void testModifyProductSuccessfully() {
 
         Warehouse.modifyProduct(1, "Pepsi", Category.DRINK, 9);
-        Product modifiedProduct = Warehouse.getProductById(1);
+        var modifiedProduct = Warehouse.getProductById(1);
 
         assertEquals(1, modifiedProduct.id());
         assertEquals("Pepsi", modifiedProduct.name());
@@ -93,8 +84,8 @@ public class WarehouseTest {
     @Test
     @DisplayName("Test to get a product after given date")
     void testGetProductAfterGivenDate() {
-        LocalDate dateTest = LocalDate.of(2024, 11, 21);
-        List<Product> result = Warehouse.getProductsAfterGivenDate(dateTest);
+        var dateTest = LocalDate.of(2024, 11, 21);
+        var result = Warehouse.getProductsAfterGivenDate(dateTest);
 
         assertEquals(2, result.size());
 
@@ -106,7 +97,7 @@ public class WarehouseTest {
     @Test
     @DisplayName("Test for adding new product")
     void testForAddingNewProduct() {
-        int initialSize = Warehouse.getAllProducts().size();
+        var initialSize = Warehouse.getAllProducts().size();
         var newTestProduct = new Product(11, "Biff", Category.MEAT, 10, LocalDate.now(), LocalDate.now());
 
         Warehouse.addNewProduct(newTestProduct);
@@ -125,16 +116,16 @@ public class WarehouseTest {
     @Test
     @DisplayName("Test for getting modified products")
     void testForGettingModifiedProducts() {
-        var furstProduct = new Product(13, "Korv", Category.MEAT, 5, LocalDate.now(), null);
+        var firstProduct = new Product(13, "Korv", Category.MEAT, 5, LocalDate.now(), null);
         var secondProduct = new Product(12, "Anka", Category.MEAT, 10, LocalDate.now(), LocalDate.of(2040, 12, 24));
 
         Warehouse.addNewProduct(secondProduct);
-        Warehouse.addNewProduct(furstProduct);
+        Warehouse.addNewProduct(firstProduct);
 
         var result = Warehouse.getProductsThatHasBeenModified();
 
         assertTrue(result.contains(secondProduct), "Second product should be considered modified.");
-        assertFalse(result.contains(furstProduct), "First product should not be considered modified.");
+        assertFalse(result.contains(firstProduct), "First product should not be considered modified.");
 
     }
 

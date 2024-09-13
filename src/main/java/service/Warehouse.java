@@ -19,11 +19,7 @@ public class Warehouse {
 
 
     public static void main(String[] args) {
-        addProductForTest();
 
-
-        List<Product> test = getProductsThatHasBeenModified();
-        System.out.println(test);
     }
 
     public static void addProductForTest() {
@@ -88,7 +84,7 @@ public class Warehouse {
                         .isEqual(product.modifiedAt()))
                 .collect(Collectors.toUnmodifiableList());
     }
-    //Todo: Lägg till test för getproductsThathasBeenmodified
+
     //TOdo: Try catch?
 
 
