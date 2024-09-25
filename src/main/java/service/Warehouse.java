@@ -3,11 +3,8 @@ package service;
 import entities.Category;
 import entities.Product;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class Warehouse {
@@ -19,6 +16,7 @@ public class Warehouse {
 
 
     public static void main(String[] args) {
+
 
     }
 
@@ -40,10 +38,11 @@ public class Warehouse {
     }
 
 
-    public static Product getProductById(int id) {
+    public static Optional<Product> getProductById(int id) {
 
-        return products.stream().filter(product -> product.id() == id)
-                .findFirst().orElseThrow(() -> new IllegalArgumentException("Product not found"));
+        return products.stream()
+                .filter(product -> product.id() == id)
+                .findFirst();
 
     }
 
